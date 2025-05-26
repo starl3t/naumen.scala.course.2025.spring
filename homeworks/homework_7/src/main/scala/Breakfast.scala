@@ -1,41 +1,23 @@
-package ru.dru
+object ResuourceTraining extends ZIOAppDefault {
 
-import zio.CanFail.canFailAmbiguous1
-import zio.{Duration, Exit, Fiber, Scope, ZIO, ZIOApp, ZIOAppArgs, ZIOAppDefault, durationInt}
+  def readData(filePath: String): IO[Throwable, String] = ???
+  def readData(filePath: String): IO[Throwable, String] = ZIO.acquireReleaseWith(
+    ZIO.attempt(new BufferedReader(new FileReader(filePath)))
+  )(
+    reader => ZIO.succeed(reader.close())
+  ) {
+    reader => ZIO.attempt(reader.readLine())
+  }
 
-import java.time.LocalDateTime
-import scala.concurrent.TimeoutException
+  def writeData(filePath: String, data: String): ZIO[Any, Nothing, Unit] = ZIO.acquireReleaseWith(
+    ZIO.succeed(new FileWriter(filePath))
+  )(
+    writer => ZIO.succeed(writer.close())
+  ) {
+    writer => ZIO.succeed(writer.write(data))
+  }
 
-case class SaladInfoTime(tomatoTime: Duration, cucumberTime: Duration)
+  def writeData(filePath: String, data: String): ZIO[Any, Nothing, Unit] = ???
 
-
-object Breakfast extends ZIOAppDefault {
-
-  /**
-   * Функция должна эмулировать приготовление завтрака. Продолжительные операции необходимо эмулировать через ZIO.sleep.
-   * Правила приготовления следующие:
-   *  1. Нобходимо вскипятить воду (время кипячения waterBoilingTime)
-   *  2. Параллельно с этим нужно жарить яичницу eggsFiringTime
-   *  3. Параллельно с этим готовим салат:
-   *    * сначала режим  огурцы
-   *    * после этого режим помидоры
-   *    * после этого добавляем в салат сметану
-   *  4. После того, как закипит вода необходимо заварить чай, время заваривания чая teaBrewingTime
-   *  5. После того, как всё готово, можно завтракать
-   *
-   * @param eggsFiringTime время жарки яичницы
-   * @param waterBoilingTime время кипячения воды
-   * @param saladInfoTime информация о времени для приготовления салата
-   * @param teaBrewingTime время заваривания чая
-   * @return Мапу с информацией о том, когда завершился очередной этап (eggs, water, saladWithSourCream, tea)
-   */
-  def makeBreakfast(eggsFiringTime: Duration,
-                    waterBoilingTime: Duration,
-                    saladInfoTime: SaladInfoTime,
-                    teaBrewingTime: Duration): ZIO[Any, Throwable, Map[String, LocalDateTime]] = ???
-
-
-
-  override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = ZIO.succeed(println("Done"))
-
+  override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = ZIO.succeed("Done")
 }
