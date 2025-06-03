@@ -3,7 +3,7 @@ import utils.{ColorService, PictureGenerationService}
 import utils.PictureGenerationService.PictureGenerationService
 import utils.Utils._
 import zio.{IO, Random, URIO, ZIO}
-@@ -9,20 +10,22 @@ object Exercises {
+object Exercises {
 
     /**
      * В задании необходимо модифицировать ZIO объект, чтобы в случае ошибки в методе getColor
@@ -29,8 +29,7 @@ import zio.{IO, Random, URIO, ZIO}
         }))
 
 
-
-@@ -37,15 +40,16 @@ object Exercises {
+object Exercises {
         for {
             colorServ <- ZIO.service[ColorService]
             pictureServ <- ZIO.service[PictureGenerationService]
