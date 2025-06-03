@@ -29,7 +29,7 @@ import zio.{IO, Random, URIO, ZIO}
         }))
 
 
-    /**
+
 @@ -37,15 +40,16 @@ object Exercises {
         for {
             colorServ <- ZIO.service[ColorService]
